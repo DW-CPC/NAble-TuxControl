@@ -2,6 +2,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from tuxcontrol.protocol import find_handlers, parse_desktop_entry, query_default
 
@@ -91,6 +92,7 @@ class TestFindHandlers(unittest.TestCase):
 
 
 class TestQueryDefault(unittest.TestCase):
-    def test_no_xdg_mime_returns_none(self):
+    @patch("tuxcontrol.protocol.shutil.which", return_value=None)
+    def test_no_xdg_mime_returns_none(self, _which):
         result = query_default("ncentral", run=lambda *_a, **_k: None)
         self.assertIsNone(result)
